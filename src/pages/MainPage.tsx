@@ -2,6 +2,8 @@ import { AccountButton } from "../components/account/AccountButton";
 import { Button } from "../components/Button";
 import { useContractFunction } from "@usedapp/core";
 
+//contract deployed to kovan at: 0x2ae459668716560293Cba0f4930a334b6f59ab0F
+
 const MainPage = () => {
   // const { send, state } = useContractFunction()
   //
