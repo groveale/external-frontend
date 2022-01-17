@@ -141,6 +141,12 @@ describe("SimpleBank contract", function () {
     });
 
     it("Should be able to withdraw some funds", async function () {
+      //bank balance should be same as only one customer
+      const intialBalnce = await simpleBankContract.provider.getBalance(
+        simpleBankContract.address
+      );
+      expect(intialBalnce).to.equal(ethers.utils.parseEther("0"));
+
       // deposit .5 eth from addr1 to (bank) contract
       await simpleBankContract.connect(addr1).deposit({
         value: ethers.utils.parseEther("0.5"),
@@ -156,9 +162,9 @@ describe("SimpleBank contract", function () {
       expect(totalBankBalance).to.equal(ethers.utils.parseEther("0.5"));
 
       // now withdraw some of funds
-      await simpleBankContract.connect(addr1).withdrawSomeFunds({
-        value: ethers.utils.parseEther("0.4"),
-      });
+      await simpleBankContract
+        .connect(addr1)
+        .withdrawSomeFunds(ethers.utils.parseEther("0.4"));
 
       // balance od add1 should be 0.1 and show should the bank
       const newAddr1Balance = await simpleBankContract.getBalance(
@@ -167,10 +173,10 @@ describe("SimpleBank contract", function () {
       expect(newAddr1Balance).to.equal(ethers.utils.parseEther("0.1"));
 
       // bank balance should be same as only one customer
-      //   const totalBankBalance2 = await simpleBankContract.provider.getBalance(
-      //     simpleBankContract.address
-      //   );
-      //   expect(totalBankBalance2).to.equal(ethers.utils.parseEther("0.1"));
+      const totalBankBalance2 = await simpleBankContract.provider.getBalance(
+        simpleBankContract.address
+      );
+      expect(totalBankBalance2).to.equal(ethers.utils.parseEther("0.1"));
     });
 
     it("Should not be able to withdraw more than you put in", async function () {
@@ -184,9 +190,9 @@ describe("SimpleBank contract", function () {
       expect(addr1BalanceInitial).to.equal(ethers.utils.parseEther("0.5"));
 
       await expect(
-        simpleBankContract.connect(addr1).withdrawSomeFunds({
-          value: ethers.utils.parseEther("0.6"),
-        })
+        simpleBankContract
+          .connect(addr1)
+          .withdrawSomeFunds(ethers.utils.parseEther("0.6"))
       ).to.be.revertedWith("Not enough ETH in your Bank");
 
       // add1 balance should be same as before withdrawal attempt

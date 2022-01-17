@@ -12,6 +12,7 @@
 # production
 /build
 /cache
+/artifacts
 
 # misc
 .DS_Store
@@ -25,3 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
+.env
+
+yarn.lock

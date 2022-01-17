@@ -2,6 +2,8 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import "hardhat/console.sol";
+
 contract SimpleBank {
     mapping(address => uint256) private addressToBankBalance;
     mapping(address => bool) private bankersMapping;
@@ -40,20 +42,22 @@ contract SimpleBank {
 
     function withdrawAllOwnFunds() public payable {
         msg.sender.transfer(addressToBankBalance[msg.sender]);
+
         addressToBankBalance[msg.sender] = 0;
     }
 
-    function withdrawSomeFunds() public payable {
+    function withdrawSomeFunds(uint256 amount) public payable {
         // Check if the transaction sender has enough ETH in the bank.
         // If `require`'s first argument evaluates to `false` then the
         // transaction will revert.
         require(
-            addressToBankBalance[msg.sender] >= msg.value,
+            addressToBankBalance[msg.sender] >= amount,
             "Not enough ETH in your Bank"
         );
-
-        msg.sender.transfer(msg.value);
-        addressToBankBalance[msg.sender] -= msg.value;
+        // console.log("Contract balance: %s", address(this).balance);
+        msg.sender.transfer(amount);
+        addressToBankBalance[msg.sender] -= amount;
+        // console.log("Contract balance: %s", address(this).balance);
     }
 
     function alreadyBanking(address _wallet) public view returns (bool) {
