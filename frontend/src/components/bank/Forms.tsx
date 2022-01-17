@@ -1,48 +1,57 @@
+import { useContractFunction, useContractCall, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core'
 import { Contract } from '@ethersproject/contracts'
-import { utils } from 'ethers'
-import React from 'react'
-import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core'
+import { utils, BigNumber } from 'ethers'
 
-import { TransactionForm } from './TransactionForm'
+import { TransactionForm } from './TransactionFrom'
 
-import WethAbi from '../../abi/Weth10.json'
+//contract deployed to kovan at: 0xF30d9351Cef6a54B33AB9F4032959705209F875C
 
-const wethInterface = new utils.Interface(WethAbi)
-const wethContractAddress = '0xA243FEB70BaCF6cD77431269e68135cf470051b4'
-const contract = new Contract(wethContractAddress, wethInterface)
+import simpleBankABI from '../../abi/SimpleBank.json'
+import wethInterfaceABI from '../../abi/Weth10.json'
+
+const simpleBankInterface = new utils.Interface(simpleBankABI)
+const simpleBankAddress = '0xF30d9351Cef6a54B33AB9F4032959705209F875C'
+const simpleBankContract = new Contract(simpleBankAddress, simpleBankInterface)
 
 export const DepositEth = () => {
   const { account } = useEthers()
   const etherBalance = useEtherBalance(account)
 
-  const { state, send } = useContractFunction(contract, 'deposit', { transactionName: 'Wrap' })
+  const { state, send } = useContractFunction(simpleBankContract, 'deposit', { transactionName: 'Deposit' })
 
   const depositEther = (etherAmount: string) => {
     send({ value: utils.parseEther(etherAmount) })
   }
 
   return (
-    <TransactionForm balance={etherBalance} send={depositEther} title="Wrap Ether" ticker="ETH" transaction={state} />
+    <TransactionForm balance={etherBalance} send={depositEther} title="Deposit Ether" ticker="ETH" transaction={state} />
   )
 }
 
 export const WithdrawEth = () => {
-  const { account } = useEthers()
-  const wethBalance = useTokenBalance(wethContractAddress, account)
+    const { account } = useEthers()
+    const bankBalance: BigNumber | undefined = useContractCall({
+        abi: simpleBankInterface,
+        address: simpleBankAddress,
+        method: 'balanceOf',
+        args: [account],
+      })?.[0];
 
-  const { state, send } = useContractFunction(contract, 'withdraw', { transactionName: 'Unwrap' })
-
-  const withdrawEther = (wethAmount: string) => {
-    send(utils.parseEther(wethAmount))
+      console.log(bankBalance);
+  
+    const { state, send } = useContractFunction(simpleBankContract, 'withdrawSomeFunds', { transactionName: 'Withdraw' })
+  
+    const withdrawEther = (ethAmount: string) => {
+      send(utils.parseEther(ethAmount))
+    }
+  
+    return (
+      <TransactionForm
+        balance={bankBalance}
+        send={withdrawEther}
+        title="Withdraw Ether"
+        ticker="ETH"
+        transaction={state}
+      />
+    )
   }
-
-  return (
-    <TransactionForm
-      balance={wethBalance}
-      send={withdrawEther}
-      title="Unwrap Ether"
-      ticker="WETH"
-      transaction={state}
-    />
-  )
-}

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BorderRad, Colors, Fonts, Transitions } from "../styles/styles";
+import { BorderRad, Colors, Fonts, Transitions } from "../../styles/styles";
 
 export const Button = styled.button`
   display: grid;

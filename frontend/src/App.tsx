@@ -5,14 +5,13 @@ import MainPage from "./pages/MainPage";
 import { GlobalStyle } from "./styles/GlobalStyle";
 
 const config = {
-  readOnlyChainId: Kovan.chainId,
+  readOnlyChainId: Mainnet.chainId,
   readOnlyUrls: {
-    [Mainnet.chainId]:
-      "https://mainnet.infura.io/v3/ccc528634cd747c4965b25188a774e01",
+    [Mainnet.chainId]: 'https://mainnet.infura.io/v3/3165a249c65f4198bf57200109b8fadf',
     [Kovan.chainId]:
-      "https://kovan.infura.io/v3/ccc528634cd747c4965b25188a774e01",
+      'https://kovan.infura.io/v3/c0f4fcc6766542a0add0b57f3c631c97',
   },
-};
+}
 
 function App() {
   return (

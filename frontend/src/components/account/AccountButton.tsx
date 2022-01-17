@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { AccountModal } from "./AccountModal";
 import { Colors } from "../../styles/styles";
-import { Button } from "../Button";
+import { Button } from "../base/Button";
 
 export const AccountButton = () => {
   const { account, deactivate, activateBrowserWallet } = useEthers();
