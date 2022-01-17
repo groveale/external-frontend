@@ -1,4 +1,5 @@
 import { AccountButton } from "../components/account/AccountButton";
+import { AccountBalance } from "../components/account/AccountBalance";
 import { Button } from "../components/Button";
 import { useContractFunction } from "@usedapp/core";
 
@@ -15,6 +16,7 @@ const MainPage = () => {
     <div>
       <h1>First Bank of DeFi</h1>
       <AccountButton />
+      <AccountBalance />
       <Button onClick={onDeposit}>deposit $20000</Button>
     </div>
   );
